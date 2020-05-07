@@ -6,7 +6,12 @@
 	
 	function handleDrop (event) {
 		event.preventDefault()
-		console.log("dropped!")
+		// the dataTransfered is the what got dropped
+		let id = event.dataTransfer.getData("text/plain")
+		
+		// now we need to tell that element that it was a valid drop
+		// set one of its attributes
+		document.getElementById(id).setAttribute("dropped", true)
 	}
 </script>
 

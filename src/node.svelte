@@ -1,40 +1,54 @@
 <script>
-	let position = { x: 0, y: 0 };
-	let offSet = {x:0, y:0}
+	let id = 0
+
+	let x = 0
+	let y = 0
+	let xOffSet = 0
+	let yOffSet = 0
 
 	function handleDragStart(event) {
 		//calc offset
-		console.log(event.currentTarget.style)
+		xOffSet = event.offsetX
+		yOffSet = event.offsetY
 		event.dataTransfer.dropEffect = "move";
 		event.currentTarget.style.border = "dashed"
-		event.dataTransfer.setData("text/plain", event.target.id)
+		event.dataTransfer.setData("text/plain", event.target.id); //event.target.outerHTML
 		//const img = new Image();
 		//img.src = 'example.png'
-		//event.dataTransfer.setDragImage(img, xOffset, yOffset)
+		//event.dataTransfer.setDragImage(img, xOffSet, yOffSet)
 	}
 	
 	function handleDragEnd(event) {
-		// calc end position if valid?
-		position.x = event.clientX;
-		position.y = event.clientY;
+		// what should happen regardless of whether the drag was successful
 		event.target.style.border = "solid"
+
+		// this should only happen if the node was dropped in the editor
+		let el = document.getElementById(id)
+		
+		if (el.hasAttribute("dropped")) {
+			x = event.clientX - xOffSet;
+			y = event.clientY - yOffSet;
+			el.removeAttribute("dropped")
+		}
 	}
 </script>
 
 <style>
 	div {
 		/*top: {@javascript m.x}*/
-		position: relative;
-		top: 100px;
-		left: 100px;
+		position: absolute;
 		width: 200px;
 		border: solid;
 		background-color: white;
 	}
 </style>
 
-<div on:dragstart={handleDragStart} on:dragend={handleDragEnd} draggable="true">
+<div on:dragstart={handleDragStart}
+		 on:dragend={handleDragEnd}
+		 id={id}
+		 style="top: {y}px; left: {x}px"
+		 draggable="true">
 	Node:<br>
-	Position [{position.x}, {position.y}]<br>
-	Offset: [{offSet.x}, {offSet.y}]<br>
+	Position [{x}, {y}]<br>
+	Offset: [{xOffSet}, {yOffSet}]<br>
 </div>
