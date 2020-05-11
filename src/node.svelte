@@ -1,8 +1,13 @@
 <script>
-	let id = 0
+	import { scale } from 'svelte/transition'
+	import RadialMenu from './ui/radialmenu.svelte';
+	
+	export let id = 0
+	export let selected = false
+	let openmenu = false
 
-	let x = 0
-	let y = 0
+	export let x = 0
+	export let y = 0
 	let xOffSet = 0
 	let yOffSet = 0
 
@@ -10,12 +15,12 @@
 		//calc offset
 		xOffSet = event.offsetX
 		yOffSet = event.offsetY
+
 		event.dataTransfer.dropEffect = "move";
-		event.currentTarget.style.border = "dashed"
+		// event.currentTarget.style.border = "dashed"
 		event.dataTransfer.setData("text/plain", event.target.id); //event.target.outerHTML
-		//const img = new Image();
-		//img.src = 'example.png'
-		//event.dataTransfer.setDragImage(img, xOffSet, yOffSet)
+		
+		selected = true
 	}
 	
 	function handleDragEnd(event) {
@@ -31,24 +36,43 @@
 			el.removeAttribute("dropped")
 		}
 	}
+
+	function handleContextMenu(event) {
+		event.preventDefault()
+		console.log("open context menu")
+		openmenu = true
+	}
 </script>
 
 <style>
 	div {
-		/*top: {@javascript m.x}*/
 		position: absolute;
 		width: 200px;
 		border: solid;
 		background-color: white;
 	}
+
+	div[selected=true] {
+		border: dashed;
+	}
+
+	div:hover {
+		cursor: grab;
+		/* transform: scale(1.1); */
+	}
 </style>
 
 <div on:dragstart={handleDragStart}
-		 on:dragend={handleDragEnd}
-		 id={id}
-		 style="top: {y}px; left: {x}px"
-		 draggable="true">
+	on:dragend={handleDragEnd}
+	id={id}
+	style="top: {y}px; left: {x}px;"
+	draggable="true"
+	selected={selected?true:false}
+	on:contextmenu={handleContextMenu}>
+	<!-- <RadialMenu bind:open={openmenu}></RadialMenu> -->
 	Node:<br>
 	Position [{x}, {y}]<br>
 	Offset: [{xOffSet}, {yOffSet}]<br>
+	selected: {selected}<br>
+	openmenu: {openmenu}<br>
 </div>
