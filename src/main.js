@@ -1,6 +1,6 @@
-import App from './App.svelte';
+import Editor from './editor.svelte';
 
-var app = new App({
+var app = new Editor({
 	target: document.body
 });
 
