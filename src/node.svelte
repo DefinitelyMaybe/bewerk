@@ -1,8 +1,6 @@
 <script>
-	import { scale } from 'svelte/transition'
-	
-	export let id = 0
-
+	export let selected = false
+	export let id = undefined
 </script>
 
 <style>
@@ -24,6 +22,7 @@
 </style>
 
 <div id={id}
+	selected={selected}
 	draggable="true">
-	Node:<br>
+	Node
 </div>

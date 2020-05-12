@@ -2,7 +2,7 @@
 	import Node from './node.svelte'
 	// let grabbing = false
 	let nodes = [
-		{ id:1, x:200, y:200, component:Node }
+		{ id:1, x:250, y:250, component:Node }
 	]
 	let currentNode = undefined
 
@@ -115,7 +115,10 @@
 	on:dragstart={handleDragStart}
 	on:click={handleClick}
 	draggable="true">
-	{#each nodes as {component, id}, i}
-		<svelte:component this={component} selected={currentNode===id} id={id}/>
+	{#each nodes as {component, x, y, id}, i}
+	<svelte:component this={component}
+		selected={currentNode===id}
+		id={id}
+		style="top:{y}px;left:{x}px"/>
 	{/each}
 </main>
