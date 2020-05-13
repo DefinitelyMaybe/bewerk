@@ -13,6 +13,9 @@
 	let backgroundXOffSet = 0
 	let backgroundYOffSet = 0
 
+	// note: node positions may not work if the editor is not placed
+	// in the top left corner (for now)
+
 	// catch mousewheel events (later mobile pinch) for zoom
 
 	// create an origin and position nodes relative to the origin
@@ -88,9 +91,7 @@
 	}
 
 	main {
-		position: absolute;
-		top: 50px;
-		left: 50px;
+		position: relative;
 		width: 800px;
 		height: 600px;
 		clip-path: inset(0px 0px 0px 0px);
