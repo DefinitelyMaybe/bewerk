@@ -13,6 +13,7 @@
 
 	div[selected=true] {
 		border: dashed;
+		transform: scale(1.1);
 	}
 
 	div:hover {
@@ -24,5 +25,5 @@
 <div id={id}
 	selected={selected}
 	draggable="true">
-	Node
+	Placeholder Node
 </div>
