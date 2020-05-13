@@ -2,7 +2,9 @@
 	import Node from './node.svelte'
 	// let grabbing = false
 	let nodes = [
-		{ id:1, x:250, y:250, component:Node }
+		{ id:0, x:250, y:300, component:Node },
+		{ id:1, x:250, y:250, component:Node },
+		{ id:2, x:250, y:350, component:Node }
 	]
 	let currentNode = undefined
 
@@ -75,23 +77,23 @@
 		// what should happen regardless of whether the drag was successful
 		// this should only happen if the node was dropped in the editor
 		if (currentNode) {
-			let el = document.getElementById(currentNode)
-			el.style.top = `${event.clientY - dragYOffSet}px`
-			el.style.left = `${event.clientX - dragXOffSet}px`
+			// update both the node style and the editor array
+			let y = event.clientY - dragYOffSet
+			let x = event.clientX - dragXOffSet
+
+			// assume that the id and position match within the array
+			let el = nodes[currentNode]
+			el.y = y
+			el.x = x
+
+			el = document.getElementById(currentNode)
+			el.style.top = `${y}px`
+			el.style.left = `${x}px`
 		}
 	}
 	
 	function handleDrop (event) {
 		event.preventDefault()
-		// the dataTransfered is the what got dropped
-		let id = event.dataTransfer.getData("text/plain")
-		
-		// now we need to tell that element that it was a valid drop
-		// set one of its attributes
-		if (id) {
-			// how does the dom actually know which element to use
-			document.getElementById(id).setAttribute("dropped", true)	
-		}
 	}
 
 </script>
@@ -115,10 +117,11 @@
 	on:dragstart={handleDragStart}
 	on:click={handleClick}
 	draggable="true">
-	{#each nodes as {component, x, y, id}, i}
+	{#each nodes as {component, x, y}, i}
 	<svelte:component this={component}
-		selected={currentNode===id}
-		id={id}
-		style="top:{y}px;left:{x}px;"/>
+		selected={currentNode===i}
+		id={i}
+		x={x}
+		y={y}/>
 	{/each}
 </main>
