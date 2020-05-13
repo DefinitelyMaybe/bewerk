@@ -119,6 +119,6 @@
 	<svelte:component this={component}
 		selected={currentNode===id}
 		id={id}
-		style="top:{y}px;left:{x}px"/>
+		style="top:{y}px;left:{x}px;"/>
 	{/each}
 </main>
