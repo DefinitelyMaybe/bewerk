@@ -8,7 +8,7 @@
 <style>
 	div {
 		position: absolute;
-		width: 200px;
+		width: 150px;
 		border: solid;
 		background-color: white;
 	}
