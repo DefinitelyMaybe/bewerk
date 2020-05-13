@@ -1,24 +1,17 @@
 <script>
 	import Node from './node.svelte'
-	// let grabbing = false
+	
 	let nodes = [
-		{ id:0, x:250, y:300, component:Node },
-		{ id:1, x:250, y:250, component:Node },
+		{ id:0, x:250, y:250, component:Node },
+		{ id:1, x:250, y:300, component:Node },
 		{ id:2, x:250, y:350, component:Node }
 	]
 	let currentNode = undefined
 
 	let dragXOffSet = 0
 	let dragYOffSet = 0
-
-	// try out a for loop with the component i.e.
-	// nodes.forEach(n => {
-	// 	let x = new Node()
-	// 	x.x = n.x
-	// 	x.y = n.y
-	// 	x.id = n.id
-	// 	document.appendChild(x)
-	// });
+	let backgroundXOffSet = 0
+	let backgroundYOffSet = 0
 
 	// catch mousewheel events (later mobile pinch) for zoom
 
@@ -27,42 +20,32 @@
 	// pick up on the drag events for panning across the graph
 	function handleDragStart(event) {
 		// check what was dragged
-		// grabbing = true
-		if (event.target.nodeName == 'MAIN') {
+		if (!currentNode) {
 			// editor
 			const img = new Image();
 			event.dataTransfer.setDragImage(img, 0, 0)
 		} else {
 			// node
-			// get node id and set to current node
-			// then update nodes selected prop
-			
 			//calc offset
 			dragXOffSet = event.offsetX
 			dragYOffSet = event.offsetY
 
 			event.dataTransfer.dropEffect = "move";
-			// event.currentTarget.style.border = "dashed"
-			// event.dataTransfer.setData("text/plain", event.target.id); //event.target.outerHTML
+
+			// get node id and set to current node
 			currentNode = event.target.id
 		}
 	}
 
-	//on click of empty space de-select current node
-	function handleClick(event) {
-		if (event.target.nodeName == 'MAIN') {
-			// de-select current node
-			if (currentNode) {
-				document.getElementById(currentNode).setAttribute("selected", false)
-			}
+	function handleMouseDown(event) {
+		// de-select current node
+		if (currentNode) {
 			currentNode = undefined
-		} else {
-			// target must be a node
-			if (currentNode) {
-				document.getElementById(currentNode).setAttribute("selected", false)
-			}
+		}
+
+		// if the target has an id then its a node
+		if (event.target.id) {
 			currentNode = event.target.id
-			document.getElementById(currentNode).setAttribute("selected", true)
 		}
 	}
 
@@ -81,7 +64,8 @@
 			let y = event.clientY - dragYOffSet
 			let x = event.clientX - dragXOffSet
 
-			// assume that the id and position match within the array
+			// assume that the id and position match within the arSay = 0
+			let backgroundYOffSet = 0
 			let el = nodes[currentNode]
 			el.y = y
 			el.x = x
@@ -99,7 +83,14 @@
 </script>
 
 <style>
+	* {
+		box-sizing: border-box;
+	}
+
 	main {
+		position: absolute;
+		top: 50px;
+		left: 50px;
 		width: 800px;
 		height: 600px;
 		clip-path: inset(0px 0px 0px 0px);
@@ -108,6 +99,12 @@
   	background-image:
     	linear-gradient(to right, #9ae5ff 1px, transparent 1px),
     	linear-gradient(to bottom, #9ae5ff 1px, transparent 1px);
+		overflow: hidden;
+	}
+
+	.background {
+		width: 3508px;
+		height: 2480px;
 	}
 </style>
 
@@ -115,13 +112,15 @@
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
 	on:dragstart={handleDragStart}
-	on:click={handleClick}
+	on:mousedown={handleMouseDown}
 	draggable="true">
-	{#each nodes as {component, x, y}, i}
-	<svelte:component this={component}
-		selected={currentNode===i}
-		id={i}
-		x={x}
-		y={y}/>
-	{/each}
+	<div class="background">
+		{#each nodes as {component, x, y}, i}
+			<svelte:component this={component}
+				selected={currentNode===i}
+				id={i}
+				x={x}
+				y={y}/>
+		{/each}
+	</div>
 </main>
