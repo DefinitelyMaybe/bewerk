@@ -1,6 +1,8 @@
 <script>
 	export let selected = false
 	export let id = undefined
+	export let x = 0
+	export let y = 0
 </script>
 
 <style>
@@ -24,6 +26,7 @@
 
 <div id={id}
 	selected={selected}
-	draggable="true">
+	draggable="true"
+	style="top:{y}px;left:{x}px;">
 	Placeholder Node
 </div>
