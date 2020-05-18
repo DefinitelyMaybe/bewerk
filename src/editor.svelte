@@ -134,7 +134,6 @@
 	}
 </style>
 
-{backgroundOffsetX}, {backgroundOffsetY}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
