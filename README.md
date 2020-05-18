@@ -1,6 +1,10 @@
 # bewerk
+Why? Think minecraft modding. Minecrafts a great game but there's an order of magnitude more that the communitty can do with it. Let's simply repeat that process but within a different context.
+
+What? It's a visual editor. It's also intended to be modified, remixed and extended.
 
 # vvv auto generated vvv
+may delete later
 *Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
 
 ---
