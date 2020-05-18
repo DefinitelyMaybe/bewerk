@@ -2,9 +2,9 @@
 	import Node from './node.svelte'
 	
 	let nodes = [
-		{ id:0, x:250, y:250, component:Node },
-		{ id:1, x:250, y:300, component:Node },
-		{ id:2, x:250, y:350, component:Node }
+		{ x:250, y:250, component:Node },
+		{ x:250, y:300, component:Node },
+		{ x:250, y:350, component:Node }
 	]
 	let currentNode = undefined
 
@@ -101,6 +101,7 @@
     	linear-gradient(to right, #9ae5ff 1px, transparent 1px),
     	linear-gradient(to bottom, #9ae5ff 1px, transparent 1px);
 		overflow: hidden;
+		border: solid black 1px;
 	}
 
 	.background {
@@ -118,7 +119,7 @@
 	<div class="background">
 		{#each nodes as {component, x, y}, i}
 			<svelte:component this={component}
-				selected={currentNode===i}
+				selected={currentNode==i}
 				id={i}
 				x={x}
 				y={y}/>
