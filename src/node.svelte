@@ -9,7 +9,7 @@
 	div {
 		position: absolute;
 		width: 150px;
-		border: solid;
+		border: solid black 2px;
 		background-color: white;
 	}
 
