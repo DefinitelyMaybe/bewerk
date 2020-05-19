@@ -15,8 +15,8 @@
 	// let prevX = 0
 	// let prevY = 0
 
-	$: scrollX = 0
-	$: scrollY = 0
+	scrollX = 0
+	scrollY = 0
 
 	let backgroundOffsetX = 0
 	let backgroundOffsetY = 0
