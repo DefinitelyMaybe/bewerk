@@ -2,18 +2,20 @@
 	import Node from './node.svelte'
 	
 	let nodes = [
-		{ x:200, y:200, component:Node },
-		{ x:250, y:300, component:Node },
-		{ x:300, y:400, component:Node }
+		{ x:225, y:180, component:Node },
+		{ x:225, y:400, component:Node },
+		{ x:565, y:290, component:Node }
 	]
 	let currentNode = undefined
 
 	let dragXOffSet = 0
 	let dragYOffSet = 0
 
-	// let initDragMovement = true
-	// let prevX = 0
-	// let prevY = 0
+	let initDragMovement = true
+	let moveX = 0
+	let moveY = 0
+	let prevX = 0
+	let prevY = 0
 
 	scrollX = 0
 	scrollY = 0
@@ -39,6 +41,7 @@
 	// on import cursor change to waiting?
 
 	function handleDragStart(event) {
+		initDragMovement = true
 		// check what was dragged
 		if (!currentNode) {
 			// editor
@@ -73,27 +76,32 @@
 		event.preventDefault()
 		// Later on, you might like to revisit this code so that
 		// you can drag instead of scrolling.
-		// if (!currentNode) {
-		// 	// console.log(event)
-		// 	if (!initDragMovement) {
-		// 		event.target.scroll(event.screenX - prevX, event.screenY - prevY)
-		// 		prevX = event.screenX
-		// 		prevY = event.screenY
-		// 	} else {
-		// 		prevX = event.screenX
-		// 		prevY = event.screenY
-		// 		initDragMovement = false
-		// 	}
-		// }
+		if (!currentNode) {
+			// calculate movement
+			if (!initDragMovement) {
+				moveX = event.screenX - prevX
+				moveY = event.screenY - prevY
+				prevX = event.screenX
+				prevY = event.screenY
+			} else {
+				prevX = event.screenX
+				prevY = event.screenY
+				initDragMovement = false
+			}
+			// change the elements position
+			//event.target.style.left += moveX + 'px'
+			//event.target.style.top += moveY + 'px'
+		}
 	}
 
 	function handleDragEnd(event) {
+		initDragMovement = false
 		// what should happen regardless of whether the drag was successful
 		// this should only happen if the node was dropped in the editor
 		if (currentNode) {
 			// update both the node style and the editor array
-			let y = event.clientY - dragYOffSet + backgroundOffsetY
-			let x = event.clientX - dragXOffSet + backgroundOffsetX
+			let y = (event.clientY - dragYOffSet + backgroundOffsetY) / backgroundScales[scaleIndex]
+			let x = (event.clientX - dragXOffSet + backgroundOffsetX) / backgroundScales[scaleIndex]
 
 			// assume that the id and position match within the array
 			let backgroundYOffSet = 0
@@ -160,7 +168,7 @@
 </style>
 
 
-{scrollX} {scrollY}
+{moveX} {moveY}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
