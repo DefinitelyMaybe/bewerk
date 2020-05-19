@@ -88,9 +88,10 @@
 				prevY = event.screenY
 				initDragMovement = false
 			}
-			// change the elements position
-			//event.target.style.left += moveX + 'px'
-			//event.target.style.top += moveY + 'px'
+			// change the scroll
+			// assumes that 'main' is parent
+			event.path[1].scrollLeft -= moveX
+			event.path[1].scrollTop -= moveY
 		}
 	}
 
@@ -167,8 +168,6 @@
 	}
 </style>
 
-
-{moveX} {moveY}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
