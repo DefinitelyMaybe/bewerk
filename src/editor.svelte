@@ -15,13 +15,21 @@
 	// let prevX = 0
 	// let prevY = 0
 
+	$: scrollX = 0
+	$: scrollY = 0
+
 	let backgroundOffsetX = 0
 	let backgroundOffsetY = 0
+
+	const backgroundWidth = 3508
+	const backgroundHeight = 2480
+	const backgroundScales = [0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0]
+	let scaleIndex = 4
 
 	// note: node positions may not work if the editor is not placed
 	// in the top left corner (for now)
 
-	// catch mousewheel events (later mobile pinch) for zoom
+	// catch mousewheel events (later mobile pinch) for scaling the div element
 
 	// create an origin and position nodes relative to the origin
 
@@ -87,7 +95,7 @@
 			let y = event.clientY - dragYOffSet + backgroundOffsetY
 			let x = event.clientX - dragXOffSet + backgroundOffsetX
 
-			// assume that the id and position match within the arSay = 0
+			// assume that the id and position match within the array
 			let backgroundYOffSet = 0
 			let el = nodes[currentNode]
 			el.y = y
@@ -107,6 +115,24 @@
 		backgroundOffsetX = event.target.scrollLeft
 		backgroundOffsetY = event.target.scrollTop
 	}
+
+	function handleMouseWheel(event) {
+		// will still fire even if overflow is hidden
+		if (event.ctrlKey) {
+			event.preventDefault()
+			// scale the div
+			//console.log(event)
+			if (event.deltaY > 0) {
+				// zoom out
+				scaleIndex = Math.max(scaleIndex - 1, 0)
+			} else {
+				// zoom in
+				scaleIndex = Math.min(scaleIndex + 1, backgroundScales.length)
+			}
+			// could also compute new view position
+		}
+	}
+
 </script>
 
 <style>
@@ -119,29 +145,32 @@
 		width: 800px;
 		height: 600px;
 		clip-path: inset(0px 0px 0px 0px);
-		overflow: scroll;
+		overflow: auto;
 		border: solid black 1px;
 	}
 
 	.background {
-		width: 3508px;
-		height: 2480px;
 		background-color: #fff;
   	background-size: 40px 40px;
   	background-image:
     	linear-gradient(to right, #9ae5ff 1px, transparent 1px),
     	linear-gradient(to bottom, #9ae5ff 1px, transparent 1px);
+		transform-origin: top left;
 	}
 </style>
 
+
+<p>{scrollX} {scrollY}</p>
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
 	on:dragstart={handleDragStart}
 	on:scroll={handleScroll}
 	on:mousedown={handleMouseDown}
+	on:wheel={handleMouseWheel}
 	draggable="true">
-	<div class="background">
+	<div class="background"
+		style="transform: scale({backgroundScales[scaleIndex]}); width:{backgroundWidth*backgroundScales[scaleIndex]}px; height: {backgroundHeight*backgroundScales[scaleIndex]}px;">
 		{#each nodes as {component, x, y}, i}
 			<svelte:component this={component}
 				selected={currentNode==i}
