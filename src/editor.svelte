@@ -160,7 +160,7 @@
 </style>
 
 
-<p>{scrollX} {scrollY}</p>
+{scrollX} {scrollY}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
