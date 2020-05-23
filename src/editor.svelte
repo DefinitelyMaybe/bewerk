@@ -136,7 +136,7 @@
 				scaleIndex = Math.max(scaleIndex - 1, 0)
 			} else {
 				// zoom in
-				scaleIndex = Math.min(scaleIndex + 1, backgroundScales.length)
+				scaleIndex = Math.min(scaleIndex + 1, backgroundScales.length - 1)
 			}
 			// could also compute new view position
 		}
@@ -168,6 +168,7 @@
 	}
 </style>
 
+{scaleIndex}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
