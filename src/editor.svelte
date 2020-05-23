@@ -168,7 +168,6 @@
 	}
 </style>
 
-{scaleIndex}
 <main on:dragover={handleDragOver}
 	on:dragend={handleDragEnd}
 	on:drop={handleDrop}
