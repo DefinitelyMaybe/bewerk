@@ -1,5 +1,6 @@
 <script>
 	import Node from './node.svelte'
+	import Menu from './ui/menu.svelte'
 	
 	let nodes = [
 		{ x:225, y:180, component:Node },
@@ -23,9 +24,9 @@
 	let backgroundOffsetX = 0
 	let backgroundOffsetY = 0
 
-	const backgroundWidth = 3508
-	const backgroundHeight = 2480
-	const backgroundScales = [0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0]
+	const bgWidth = 3508
+	const bgHeight = 2480
+	const bgScales = [0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0]
 	let scaleIndex = 4
 
 	// note: node positions may not work if the editor is not placed
@@ -101,8 +102,8 @@
 		// this should only happen if the node was dropped in the editor
 		if (currentNode) {
 			// update both the node style and the editor array
-			let y = (event.clientY - dragYOffSet + backgroundOffsetY) / backgroundScales[scaleIndex]
-			let x = (event.clientX - dragXOffSet + backgroundOffsetX) / backgroundScales[scaleIndex]
+			let y = (event.clientY - dragYOffSet + backgroundOffsetY) / bgScales[scaleIndex]
+			let x = (event.clientX - dragXOffSet + backgroundOffsetX) / bgScales[scaleIndex]
 
 			// assume that the id and position match within the array
 			let backgroundYOffSet = 0
@@ -136,7 +137,7 @@
 				scaleIndex = Math.max(scaleIndex - 1, 0)
 			} else {
 				// zoom in
-				scaleIndex = Math.min(scaleIndex + 1, backgroundScales.length - 1)
+				scaleIndex = Math.min(scaleIndex + 1, bgScales.length - 1)
 			}
 			// could also compute new view position
 		}
@@ -159,6 +160,8 @@
 	}
 
 	.background {
+		width: 3508px;
+		height: 2480px;
 		background-color: #fff;
   	background-size: 40px 40px;
   	background-image:
@@ -177,7 +180,7 @@
 	on:wheel={handleMouseWheel}
 	draggable="true">
 	<div class="background"
-		style="transform: scale({backgroundScales[scaleIndex]}); width:{backgroundWidth*backgroundScales[scaleIndex]}px; height: {backgroundHeight*backgroundScales[scaleIndex]}px;">
+		style="transform: scale({bgScales[scaleIndex]});">
 		{#each nodes as {component, x, y}, i}
 			<svelte:component this={component}
 				selected={currentNode==i}
