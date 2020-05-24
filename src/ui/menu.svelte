@@ -3,6 +3,11 @@
 </script>
 
 <style>
+  ul {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
 </style>
 
 <ul>
