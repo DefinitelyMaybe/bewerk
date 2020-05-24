@@ -22,8 +22,8 @@
 	scrollX = 0
 	scrollY = 0
 
-	let backgroundOffsetX = 0
-	let backgroundOffsetY = 0
+	let bgOffsetX = 0
+	let bgOffsetY = 0
 
 	const bgWidth = 3508
 	const bgHeight = 2480
@@ -32,14 +32,13 @@
 
 	// ref to the html below
 	let editor
-	let BB = {left:0, top:0} // init dummy vars
-	
-	onMount(()=> {
-		BB = editor.getBoundingClientRect()
-	});
 
-	// note: node positions may not work if the editor is not placed
-	// in the top left corner (for now)
+	// for later when embedding within external websites is more important
+	// probably needs to take window.scroll and boundingRect into account
+	// let BB = {left:0, top:0} // init dummy vars
+	// onMount(()=> {
+	// 	BB = editor.getBoundingClientRect()
+	// });
 	
 	// context menu for right click event
 	// (idea: on import cursor change to waiting)
@@ -105,10 +104,8 @@
 		// this should only happen if the node was dropped in the editor
 		if (currentSelection) {
 			// update both the node style and the editor array
-			let y = (event.clientY - dragYOffSet + backgroundOffsetY) / bgScales[scaleIndex]
-			let x = (event.clientX - dragXOffSet + backgroundOffsetX) / bgScales[scaleIndex]
-
-			// console.log(x, y)
+			let y = (event.clientY - dragYOffSet + bgOffsetY) / bgScales[scaleIndex]
+			let x = (event.clientX - dragXOffSet + bgOffsetX) / bgScales[scaleIndex]
 
 			// assume that the id and position match within the array
 			let backgroundYOffSet = 0
@@ -128,8 +125,8 @@
 	}
 
 	function handleScroll(event) {
-		backgroundOffsetX = event.target.scrollLeft
-		backgroundOffsetY = event.target.scrollTop
+		bgOffsetX = event.target.scrollLeft
+		bgOffsetY = event.target.scrollTop
 	}
 
 	function handleMouseWheel(event) {
@@ -158,8 +155,8 @@
 
 	main {
 		position: relative;
-		width: 800px;
-		height: 600px;
+		width: 100%;
+		height: 100%;
 		clip-path: inset(0px 0px 0px 0px);
 		overflow: auto;
 		border: solid black 1px;
@@ -190,11 +187,11 @@
 		style="transform: scale({bgScales[scaleIndex]});">
 		{#each nodes as {component, x, y}, i}
 			<svelte:component this={component}
-				selected={currentSelection==i}
+				selected={currentSelection=='node-'+i}
 				id="node-{i}"
 				x={x}
 				y={y}/>
 		{/each}
-	</div>
 	<Menu></Menu>
+	</div>
 </main>
