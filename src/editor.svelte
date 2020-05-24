@@ -33,15 +33,23 @@
 	// ref to the html below
 	let editor
 
+	let menu
+	let showMenu = false
+
 	// for later when embedding within external websites is more important
 	// probably needs to take window.scroll and boundingRect into account
 	// let BB = {left:0, top:0} // init dummy vars
-	// onMount(()=> {
-	// 	BB = editor.getBoundingClientRect()
-	// });
+	onMount(()=> {
+		//BB = editor.getBoundingClientRect()
+		menu = editor.childNodes[0].querySelector('#menu')
+	});
 	
 	// context menu for right click event
 	// (idea: on import cursor change to waiting)
+	// change menu depending on whats clicked
+
+	// hamburger menu for ... info, github link, sharing, create desktop app?
+	// https://www.w3schools.com/howto/howto_css_menu_icon.asp
 
 	function handleDragStart(event) {
 		initDragMovement = true
@@ -64,6 +72,8 @@
 	}
 
 	function handleMouseDown(event) {
+		showMenu = false
+
 		// de-select current node
 		if (currentSelection) {
 			currentSelection = undefined
@@ -146,6 +156,12 @@
 		}
 	}
 
+	function handleContextMenu(event) {
+		event.preventDefault()
+		showMenu = true
+		menu.style.top = `${event.clientY}px`
+		menu.style.left = `${event.clientX}px`
+	}
 </script>
 
 <style>
@@ -181,6 +197,7 @@
 	on:scroll={handleScroll}
 	on:mousedown={handleMouseDown}
 	on:wheel={handleMouseWheel}
+	on:contextmenu={handleContextMenu}
 	draggable="true"
 	bind:this={editor}>
 	<div class="background"
@@ -192,6 +209,6 @@
 				x={x}
 				y={y}/>
 		{/each}
-	<Menu></Menu>
+	<Menu visible={showMenu}></Menu>
 	</div>
 </main>
