@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from 'svelte';
 	import Node from './node.svelte'
 	import Menu from './ui/menu.svelte'
 	
@@ -7,7 +8,7 @@
 		{ x:225, y:400, component:Node },
 		{ x:565, y:290, component:Node }
 	]
-	let currentNode = undefined
+	let currentSelection = undefined
 
 	let dragXOffSet = 0
 	let dragYOffSet = 0
@@ -29,22 +30,24 @@
 	const bgScales = [0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0]
 	let scaleIndex = 4
 
+	// ref to the html below
+	let editor
+	let BB = {left:0, top:0} // init dummy vars
+	
+	onMount(()=> {
+		BB = editor.getBoundingClientRect()
+	});
+
 	// note: node positions may not work if the editor is not placed
 	// in the top left corner (for now)
-
-	// catch mousewheel events (later mobile pinch) for scaling the div element
-
-	// create an origin and position nodes relative to the origin
-
-	// pick up on the drag events for panning across the graph
 	
 	// context menu for right click event
-	// on import cursor change to waiting?
+	// (idea: on import cursor change to waiting)
 
 	function handleDragStart(event) {
 		initDragMovement = true
 		// check what was dragged
-		if (!currentNode) {
+		if (!currentSelection) {
 			// editor
 			const img = new Image();
 			event.dataTransfer.setDragImage(img, 0, 0)
@@ -57,19 +60,19 @@
 			event.dataTransfer.dropEffect = "move";
 
 			// get node id and set to current node
-			currentNode = event.target.id
+			currentSelection = event.target.id
 		}
 	}
 
 	function handleMouseDown(event) {
 		// de-select current node
-		if (currentNode) {
-			currentNode = undefined
+		if (currentSelection) {
+			currentSelection = undefined
 		}
 
 		// if the target has an id then its a node
 		if (event.target.id) {
-			currentNode = event.target.id
+			currentSelection = event.target.id
 		}
 	}
 
@@ -77,7 +80,7 @@
 		event.preventDefault()
 		// Later on, you might like to revisit this code so that
 		// you can drag instead of scrolling.
-		if (!currentNode) {
+		if (!currentSelection) {
 			// calculate movement
 			if (!initDragMovement) {
 				moveX = event.screenX - prevX
@@ -100,18 +103,21 @@
 		initDragMovement = false
 		// what should happen regardless of whether the drag was successful
 		// this should only happen if the node was dropped in the editor
-		if (currentNode) {
+		if (currentSelection) {
 			// update both the node style and the editor array
 			let y = (event.clientY - dragYOffSet + backgroundOffsetY) / bgScales[scaleIndex]
 			let x = (event.clientX - dragXOffSet + backgroundOffsetX) / bgScales[scaleIndex]
 
+			// console.log(x, y)
+
 			// assume that the id and position match within the array
 			let backgroundYOffSet = 0
-			let el = nodes[currentNode]
+			let index = parseInt(currentSelection.split('-')[1])
+			let el = nodes[index]
 			el.y = y
 			el.x = x
 
-			el = document.getElementById(currentNode)
+			el = editor.childNodes[0].querySelector(`#${currentSelection}`)
 			el.style.top = `${y}px`
 			el.style.left = `${x}px`
 		}
@@ -178,15 +184,17 @@
 	on:scroll={handleScroll}
 	on:mousedown={handleMouseDown}
 	on:wheel={handleMouseWheel}
-	draggable="true">
+	draggable="true"
+	bind:this={editor}>
 	<div class="background"
 		style="transform: scale({bgScales[scaleIndex]});">
 		{#each nodes as {component, x, y}, i}
 			<svelte:component this={component}
-				selected={currentNode==i}
-				id={i}
+				selected={currentSelection==i}
+				id="node-{i}"
 				x={x}
 				y={y}/>
 		{/each}
 	</div>
+	<Menu></Menu>
 </main>
