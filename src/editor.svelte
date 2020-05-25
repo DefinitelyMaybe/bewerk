@@ -1,4 +1,24 @@
 <script>
+	// Each element corresponds to a javascript type
+	// (Number, String, Boolean, Function, Object, Symbol)
+	
+	// Blocks are custom elements which combine multiple elements and/or other blocks
+
+	// All elements and blocks are created on the canvas
+
+	// context menu for right click event
+	// (idea: on import cursor change to waiting)
+	// change menu depending on whats clicked
+
+	// hamburger menu for ... info, github link, sharing, create desktop app?
+	// https://www.w3schools.com/howto/howto_css_menu_icon.asp
+
+	// mouse modifiers
+	// mouse icon on drag
+	// mouse icon on box-select nodes (for copy+paste nodes)
+
+	// tabs for multiple canvas's
+
 	import { onMount } from 'svelte';
 	import Node from './node.svelte'
 	import Menu from './ui/menu.svelte'
@@ -43,13 +63,6 @@
 		//BB = editor.getBoundingClientRect()
 		menu = editor.childNodes[0].querySelector('#menu')
 	});
-	
-	// context menu for right click event
-	// (idea: on import cursor change to waiting)
-	// change menu depending on whats clicked
-
-	// hamburger menu for ... info, github link, sharing, create desktop app?
-	// https://www.w3schools.com/howto/howto_css_menu_icon.asp
 
 	function handleDragStart(event) {
 		initDragMovement = true
